@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://js.zohostatic.com/creator/widgets/version/1.0/widgetsdk-min.js"></script>
+    <style>
+        /* PURANA STYLE SAME RAKHA HAI */
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f9f9fb; color: #333; }
+        .clio-header { display: flex; justify-content: space-between; padding: 12px 20px; background: #fff; border-bottom: 1px solid #ddd; align-items: center; }
+        .header-title { font-size: 18px; font-weight: 600; }
+        .btn-primary { background: #0052cc; color: white; border: none; padding: 8px 18px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        .filter-section { display: flex; justify-content: space-between; padding: 10px 20px; background: #fff; border-bottom: 1px solid #eee; }
+        .tab-group { display: flex; background: #eee; padding: 4px; border-radius: 6px; }
+        .tab-btn { border: none; padding: 6px 16px; cursor: pointer; background: none; border-radius: 4px; font-size: 13px; color: #555; }
+        .tab-btn.active { background: #fff; font-weight: 600; color: #0052cc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .content-area { padding: 20px; }
+        .data-card { background: white; border-radius: 8px; border: 1px solid #ddd; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f3f3f3; padding: 12px; font-size: 11px; text-transform: uppercase; color: #777; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+        .status-pill { background:#eee; padding:2px 10px; border-radius:12px; font-size:11px; font-weight: 500; }
+
+        /* NAYA DETAIL VIEW STYLE (CLIO INSPIRED) */
+        #detailPage { display: none; padding: 20px; }
+        .back-btn { color: #0052cc; cursor: pointer; font-weight: 600; margin-bottom: 15px; display: inline-block; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+        .detail-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .detail-label { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+        .detail-value { font-size: 14px; color: #333; }
+    </style>
+</head>
+<body>
+
+<div id="listPage">
+    <div class="clio-header">
+        <div class="header-title">Matters</div>
+        <button class="btn-primary" onclick="openFullMatterForm()">+ New matter</button>
+    </div>
+
+    <div class="filter-section">
+        <div class="tab-group">
+            <button class="tab-btn active" onclick="loadData('All', this)">All</button>
+            <button class="tab-btn" onclick="loadData('Open', this)">Open</button>
+            <button class="tab-btn" onclick="loadData('Pending', this)">Pending</button>
+            <button class="tab-btn" onclick="loadData('Closed', this)">Closed</button>
+        </div>
+        <input type="text" id="srch" placeholder="Search..." style="padding:8px; border:1px solid #ddd; border-radius:4px; width:200px;" onkeyup="doSearch()">
+    </div>
+
+    <div class="content-area">
+        <div class="data-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Matter Name</th>
+                        <th>Matter Number</th>
+                        <th>Status</th>
+                        <th>Open Date</th>
+                        <th>Practice Area</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="5" align="center">Loading records...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="detailPage">
+    <div class="content-area">
+        <span class="back-btn" onclick="showListPage()">← Back to Matters</span>
+        <div style="font-size: 22px; font-weight: 600; margin-bottom: 20px;" id="detTitle">Matter Details</div>
+        
+        <div class="data-card">
+            <div id="fullDetailsContent" class="detail-grid">
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const OWNER = "gopalrao090";
+const APP = "legal-case-management";
+const REPORT = "All_Matters";
+
+ZOHO.CREATOR.init().then(() => {
+    loadData("All");
+});
+
+function openFullMatterForm() {
+    var finalUrl = "/"+OWNER+"/environment/development/"+APP+"/#Matter"; 
+    ZOHO.CREATOR.UTIL.navigateParentURL({
+        url: finalUrl,
+        windowName: "_parent"
+    });
+}
+
+function loadData(status, btn) {
+    if(btn) {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+    }
+
+    let tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "<tr><td colspan='5' align='center'>Fetching data...</td></tr>";
+
+    let criteria = (status !== "All") ? `Status == "${status}"` : "";
+
+    ZOHO.CREATOR.API.getAllRecords({
+        appName: APP,
+        reportName: REPORT,
+        criteria: criteria
+    }).then(res => {
+        let html = "";
+        if(res.data && res.data.length > 0) {
+            res.data.forEach(r => {
+                // Matter Name par click karne se fetchAtoZ khulega
+                html += `<tr>
+                    <td style="color:#0052cc; font-weight:500; cursor:pointer;" onclick="fetchAtoZ('${r.ID}')">${r.Matter_Name || '-'}</td>
+                    <td>${r.Matter_Number || '-'}</td>
+                    <td><span class="status-pill">${r.Status || '-'}</span></td>
+                    <td>${r.Open_Date || '-'}</td>
+                    <td>${r.Practice_Area || '-'}</td>
+                </tr>`;
+            });
+        } else {
+            html = "<tr><td colspan='5' align='center'>No records found.</td></tr>";
+        }
+        tbody.innerHTML = html;
+    }).catch(err => {
+        tbody.innerHTML = "<tr><td colspan='5' align='center' style='color:red;'>Error loading data.</td></tr>";
+    });
+}
+
+// A TO Z DATA FETCHING LOGIC
+function fetchAtoZ(recId) {
+    document.getElementById("listPage").style.display = "none";
+    document.getElementById("detailPage").style.display = "block";
+    document.getElementById("fullDetailsContent").innerHTML = "Loading all fields...";
+
+    ZOHO.CREATOR.API.getRecordById({
+        appName: APP,
+        reportName: REPORT,
+        id: recId
+    }).then(res => {
+        let d = res.data;
+        document.getElementById("detTitle").innerText = d.Matter_Name || "Matter Details";
+        
+        let detailHtml = "";
+        // Form ke har ek field ko auto-pick karne ka loop
+        for (let key in d) {
+            if (key !== "ID" && key !== "raw_data") {
+                let val = d[key];
+                // Lookup handle karne ke liye
+                let displayVal = (typeof val === 'object' && val !== null) ? (val.display_value || JSON.stringify(val)) : (val || "-");
+                let label = key.replace(/_/g, ' '); // Underscore hatane ke liye
+
+                detailHtml += `
+                    <div class="detail-item">
+                        <div class="detail-label">${label}</div>
+                        <div class="detail-value">${displayVal}</div>
+                    </div>`;
+            }
+        }
+        document.getElementById("fullDetailsContent").innerHTML = detailHtml;
+    });
+}
+
+function showListPage() {
+    document.getElementById("detailPage").style.display = "none";
+    document.getElementById("listPage").style.display = "block";
+}
+
+function doSearch() {
+    let v = document.getElementById("srch").value.toLowerCase();
+    document.querySelectorAll("#tableBody tr").forEach(r => {
+        r.style.display = r.innerText.toLowerCase().includes(v) ? "" : "none";
+    });
+}
+</script>
+</body>
+</html>
