@@ -1,52 +1,77 @@
-// --- DETAIL PAGE FUNCTIONS ---
+// Global variable to store current record data so tabs can access it
+let currentRecordData = null; 
 
 function fetchAtoZ(recId) {
-    console.log("detailpage");
-    // 1. Switch View
+    // 1. Switch Page View
     document.getElementById("listPage").style.display = "none";
     document.getElementById("detailPage").style.display = "block";
-    document.getElementById("fullDetailsContent").innerHTML = "Loading all fields...";
-    document.getElementById("detTitle").innerText = "Loading...";
 
-    // 2. Fetch Specific Record
+    // 2. Setup Basic Detail Shell
+    const container = document.getElementById("detailContainer"); // Ensure this ID exists in HTML
+    
+    // Render the Tab Header
+    container.innerHTML = `
+        <div class="header-section" style="padding: 0 20px 20px;">
+            <div style="margin-bottom: 10px;">
+                <span class="back-btn" onclick="showListPage()">← Back to Matters</span>
+            </div>
+            <h2 id="matterHeaderTitle" style="margin:0;">Loading...</h2>
+        </div>
+
+        <div class="detail-tabs-container">
+            <div class="tab-link active" onclick="switchTab('Dashboard', this)">Dashboard</div>
+            <div class="tab-link" onclick="switchTab('Activities', this)">Activities</div>
+            <div class="tab-link" onclick="switchTab('Calendar', this)">Calendar</div>
+            <div class="tab-link" onclick="switchTab('Communications', this)">Communications</div>
+            <div class="tab-link" onclick="switchTab('Documents', this)">Documents</div>
+        </div>
+
+        <div id="tabContentArea" style="padding: 20px;">
+            <div style="text-align:center;">Loading data...</div>
+        </div>
+    `;
+
+    // 3. Fetch Data Once
     ZOHO.CREATOR.API.getRecordById({
         appName: WIDGET_CONFIG.APP,
         reportName: WIDGET_CONFIG.REPORT,
         id: recId
-    }).then(res => {
-        let d = res.data;
+    }).then(function(response) {
+        currentRecordData = response.data; // Store globally
         
         // Update Title
-        document.getElementById("detTitle").innerText = d.Matter_Name || "Matter Details";
-        
-        let detailHtml = "";
-        
-        // 3. Loop through all keys in the response
-        for (let key in d) {
-            // Filter out system fields or raw data
-            if (key !== "ID" && key !== "raw_data") {
-                let val = d[key];
-                
-                // Handle Lookups (Objects) vs Strings
-                let displayVal = (typeof val === 'object' && val !== null) 
-                                 ? (val.display_value || JSON.stringify(val)) 
-                                 : (val || "-");
-                
-                // Format Label (replace underscores with space)
-                let label = key.replace(/_/g, ' '); 
+        document.getElementById("matterHeaderTitle").innerText = 
+            currentRecordData.Matter_Name || "Matter Details";
 
-                detailHtml += `
-                    <div class="detail-item">
-                        <div class="detail-label">${label}</div>
-                        <div class="detail-value">${displayVal}</div>
-                    </div>`;
-            }
-        }
-        document.getElementById("fullDetailsContent").innerHTML = detailHtml;
+        // Load Default Tab (Dashboard)
+        loadTab_Dashboard(); 
     });
 }
 
-function showListPage() {
-    document.getElementById("detailPage").style.display = "none";
-    document.getElementById("listPage").style.display = "block";
+// Function to handle switching
+function switchTab(tabName, btnElement) {
+    // 1. Update UI (Active Class)
+    document.querySelectorAll(".tab-link").forEach(t => t.classList.remove("active"));
+    if(btnElement) btnElement.classList.add("active");
+
+    // 2. Clear Content
+    const contentArea = document.getElementById("tabContentArea");
+    contentArea.innerHTML = ""; 
+
+    // 3. Load Specific Tab Logic
+    if (tabName === "Dashboard") {
+        loadTab_Dashboard();
+    } else if (tabName === "Documents") {
+        loadTab_Documents();
+    } else if (tabName === "Activities") {
+        loadTab_Activities();
+    } else {
+        // Generic Placeholder for others
+        contentArea.innerHTML = `
+            <div class="card-box" style="text-align:center; padding: 50px;">
+                <h3>${tabName}</h3>
+                <p style="color:#888;">This section is under construction.</p>
+            </div>
+        `;
+    }
 }
