@@ -20,9 +20,12 @@ function loadData(status, btn) {
         reportName: WIDGET_CONFIG.REPORT,
         criteria: criteria
     }).then(res => {
+        // console.log(res);
         let html = "";
         if(res.data && res.data.length > 0) {
             res.data.forEach(r => {
+                        
+
                 // Note: We call fetchAtoZ(ID) here, which is in detail-page.js
                 html += `<tr>
                     <td class="clickable-link" onclick="fetchAtoZ('${r.ID}')">${r.Matter_Name || '-'}</td>
@@ -41,6 +44,8 @@ function loadData(status, btn) {
         tbody.innerHTML = "<tr><td colspan='5' align='center' style='color:red;'>Error loading data.</td></tr>";
     });
 }
+
+
 
 function doSearch() {
     let v = document.getElementById("srch").value.toLowerCase();
