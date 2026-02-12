@@ -1,0 +1,31 @@
+/* GENERAL STYLES */
+body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f9f9fb; color: #333; }
+.content-area { padding: 20px; }
+.btn-primary { background: #0052cc; color: white; border: none; padding: 8px 18px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+.data-card { background: white; border-radius: 8px; border: 1px solid #ddd; overflow: hidden; }
+
+/* HEADER */
+.clio-header { display: flex; justify-content: space-between; padding: 12px 20px; background: #fff; border-bottom: 1px solid #ddd; align-items: center; }
+.header-title { font-size: 18px; font-weight: 600; }
+
+/* FILTERS & TABS */
+.filter-section { display: flex; justify-content: space-between; padding: 10px 20px; background: #fff; border-bottom: 1px solid #eee; }
+.tab-group { display: flex; background: #eee; padding: 4px; border-radius: 6px; }
+.tab-btn { border: none; padding: 6px 16px; cursor: pointer; background: none; border-radius: 4px; font-size: 13px; color: #555; }
+.tab-btn.active { background: #fff; font-weight: 600; color: #0052cc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+#srch { padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 200px; }
+
+/* TABLE LIST VIEW */
+table { width: 100%; border-collapse: collapse; }
+th { background: #f3f3f3; padding: 12px; font-size: 11px; text-transform: uppercase; color: #777; text-align: left; }
+td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
+.status-pill { background:#eee; padding:2px 10px; border-radius:12px; font-size:11px; font-weight: 500; }
+.clickable-link { color: #0052cc; font-weight: 500; cursor: pointer; }
+
+/* DETAIL VIEW */
+#detailPage { display: none; padding: 20px; }
+.back-btn { color: #0052cc; cursor: pointer; font-weight: 600; margin-bottom: 15px; display: inline-block; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+.detail-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+.detail-label { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+.detail-value { font-size: 14px; color: #333; }
