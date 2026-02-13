@@ -55,10 +55,32 @@ function doSearch() {
 }
 
 function openFullMatterForm() {
-    // Uses config variables
-    var finalUrl = "/" + WIDGET_CONFIG.OWNER + "/environment/" + WIDGET_CONFIG.ENV + "/" + WIDGET_CONFIG.APP + "/#Matter"; 
-    ZOHO.CREATOR.UTIL.navigateParentURL({
-        url: finalUrl,
-        windowName: "_parent"
-    });
+    const formLinkName = "Contacts";
+    const envMatch = window.location.pathname.match(/\/environment\/([^/]+)\//);
+    const env = envMatch ? envMatch[1] : WIDGET_CONFIG.ENV;
+    const creatorBaseUrl = "https://creatorapp.zoho.com";
+    const formUrl = `${creatorBaseUrl}/${WIDGET_CONFIG.OWNER}/environment/${env}/${WIDGET_CONFIG.APP}/#Form:${formLinkName}`;
+
+    const popupWindow = window.open(formUrl, "contacts_form_popup", "width=1200,height=900");
+
+    if (popupWindow) {
+        popupWindow.focus();
+        return;
+    }
+
+    const navFn = ZOHO?.CREATOR?.UTIL?.navigateParentURL;
+
+    if (typeof navFn === "function") {
+        try {
+            navFn({ url: formUrl, windowName: "_parent" });
+            return;
+        } catch (e) {
+            try {
+                navFn(formUrl);
+                return;
+            } catch (e2) {}
+        }
+    }
+
+    console.log("Unable to open form");
 }
