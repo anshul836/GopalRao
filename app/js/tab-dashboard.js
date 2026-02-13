@@ -2,6 +2,7 @@ function loadTab_Dashboard() {
     const r = currentRecordData; // Access the global data
     const contentArea = document.getElementById("tabContentArea");
 
+
     // --- HELPER FOR ROWS ---
     const row = (label, value) => `
         <div class="detail-row">
@@ -48,15 +49,68 @@ function loadTab_Dashboard() {
             <div class="card-box split-left">
                 <div class="card-title" style="border-bottom:1px solid #eee; padding-bottom:10px; margin-bottom:10px;">Details</div>
                 
-                ${row("Matter description", r.Matter_Name)}
-                ${row("Responsible attorney", r.Responsible_Attorney)}
-                ${row("Practice area", r.Practice_Area)}
-                ${row("Status", `<span class="status-badge">${r.Status}</span>`)}
-                ${row("Open date", r.Open_Date)}
-                ${row("Billable", "Yes, hourly")}
-                ${row("Maildrop address", r.Email || "No email available")}
-            </div>
+                ${row("Matter description", r.Matter_description)}
 
+${row(
+        "Responsible attorney",
+        r.Responsible_Attorney?.display_value
+            ? `<a href="#" class="text-link">${r.Responsible_Attorney.display_value.trim()}</a>`
+            : "—"
+    )}
+
+${row("Responsible staff", r.Responsible_staff || "—")}
+
+${row("Permissions", r.Permissions || "—")}
+
+${row(
+        "Blocked users",
+        r.Blocked_users?.display_value || "—"
+    )}
+
+${row(
+        "Originating attorney",
+        r.Originating_Attorney?.display_value
+            ? `<a href="#" class="text-link">${r.Originating_Attorney.display_value.trim()}</a>`
+            : "—"
+    )}
+
+${row(
+        "Matter notifications",
+        r.Matter_notifications || "—"
+    )}
+
+${row("Practice area", r.Practice_Area || "—")}
+
+${row("Client reference number", r.Client_reference_number || "—")}
+
+${row(
+        "Location",
+        r.Location?.display_value || "—"
+    )}
+
+${row(
+        "Status",
+        `<select class="status-select">
+      <option ${r.Status === "Open" ? "selected" : ""}>Open</option>
+      <option ${r.Status === "Pending" ? "selected" : ""}>Pending</option>
+      <option ${r.Status === "Closed" ? "selected" : ""}>Closed</option>
+   </select>`
+    )}
+
+${row("Open date", r.Open_Date || "—")}
+${row("Pending date", r.Pending_date || "—")}
+${row("Closed date", r.Closed_date || "—")}
+${row("Limitations date", r.Limitations_date || "—")}
+
+${row("Billable", r.Billable || "—")}
+
+${row(
+        "Maildrop address",
+        r.Maildrop_address?.display_value || "—"
+    )}
+
+
+            </div>
             <div class="split-right">
                 <div class="card-box" style="margin-bottom:20px;">
                     <div class="card-title">Conflict Checks</div>
