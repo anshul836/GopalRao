@@ -406,6 +406,17 @@ td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
 
 .note-text-truncate { color: #4f566b; line-height: 1.5; font-size: 13px; }
 .more-link { color: #0061d5; font-size: 11px; cursor: pointer; margin-left: 5px; font-weight: 600; }
+.note-more-btn {
+    background: none;
+    border: none;
+    color: #0061d5;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 0 0 4px;
+    text-decoration: underline;
+}
+.note-more-btn:hover { color: #004bb0; }
 
 /* ACTION PILL DROP DOWN */
 .action-pill { 
@@ -463,3 +474,470 @@ td { padding: 12px; border-bottom: 1px solid #eee; font-size: 13px; }
     transition: 0.2s;
 }
 .pager-btn:hover { background: #f7f9fc; color: #0061d5; }
+
+/* ==========================================================================
+   NOTE POPUP VIEW
+   ========================================================================== */
+.note-popup-body {
+    margin: 0;
+    background: linear-gradient(160deg, #eef2ff 0%, #f4f6f8 50%, #f8fafc 100%);
+    color: #1f2937;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    padding: 28px;
+}
+
+.note-popup-shell {
+    max-width: 980px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.10);
+    overflow: hidden;
+}
+
+.note-popup-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+}
+
+.note-popup-back-btn {
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    color: #1e3a8a;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.note-popup-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.note-popup-meta {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+    gap: 10px;
+    padding: 18px 22px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.note-popup-meta-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: #fcfcfd;
+}
+
+.note-popup-meta-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.note-popup-meta-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.note-popup-content {
+    padding: 24px 22px 28px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #1f2937;
+}
+
+.note-popup-note-body {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f9fafb;
+    padding: 16px;
+}
+
+@media (max-width: 720px) {
+    .note-popup-body { padding: 12px; }
+    .note-popup-meta { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   ACTIVITIES TAB
+   ========================================================================== */
+.activities-page {
+    background: #ffffff;
+    border: 1px solid #e3e8ee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.activities-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e7ebf0;
+    background: #f9fbfe;
+}
+
+.activities-title {
+    margin: 0;
+    font-size: 28px;
+    line-height: 1;
+    color: #1a1f36;
+    font-weight: 700;
+}
+
+.activities-header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.activities-filters {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e7ebf0;
+    background: #ffffff;
+    flex-wrap: wrap;
+}
+
+.activities-filter-left,
+.activities-filter-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.activities-pill-group {
+    display: inline-flex;
+    border: 1px solid #cfd8e3;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.activities-pill {
+    border: none;
+    background: #ffffff;
+    color: #3d495a;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.activities-pill + .activities-pill {
+    border-left: 1px solid #d7dee7;
+}
+
+.activities-pill.active {
+    background: #eaf2ff;
+    color: #0056bd;
+}
+
+.activities-input,
+.activities-select {
+    height: 34px;
+    border: 1px solid #cfd8e3;
+    border-radius: 6px;
+    padding: 0 10px;
+    font-size: 13px;
+    color: #2c3b4f;
+    background: #ffffff;
+}
+
+.activities-keyword {
+    min-width: 180px;
+}
+
+.activities-separator {
+    color: #6d7785;
+    font-weight: 600;
+}
+
+.activities-table-wrap {
+    overflow-x: auto;
+}
+
+.activities-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px;
+    font-size: 13px;
+}
+
+.activities-table thead th {
+    background: #f4f7fb;
+    color: #3f4a5c;
+    border-bottom: 1px solid #dbe3ec;
+    padding: 10px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: none;
+    white-space: nowrap;
+}
+
+.activities-table tbody td {
+    border-top: 1px solid #edf1f5;
+    padding: 8px;
+    color: #2f3b4e;
+    white-space: nowrap;
+}
+
+.activities-table tbody tr:hover {
+    background: #fbfdff;
+}
+
+.activities-edit-btn {
+    background: #ffffff;
+    border: 1px solid #c9d4e1;
+    color: #1f2f46;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.activities-edit-btn:hover {
+    background: #f1f6ff;
+    border-color: #96b3df;
+}
+
+.activities-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.activities-type::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.activities-type.is-time::before {
+    background: #f0822d;
+}
+
+.activities-type.is-expense::before {
+    background: #4f7cff;
+}
+
+.activities-money {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.activities-user-link {
+    color: #0f5fc9;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.activities-empty {
+    text-align: center;
+    color: #6b7688;
+    padding: 26px 10px !important;
+    font-weight: 600;
+}
+
+.activities-checkbox {
+    width: 14px;
+    height: 14px;
+}
+
+/* ==========================================================================
+   CALENDAR TAB (IN-TAB MONTH VIEW)
+   ========================================================================== */
+.calendar-lite-shell {
+    background: #ffffff;
+    border: 1px solid #e3e8ee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.calendar-lite-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e7ebf0;
+    background: #f9fbfe;
+}
+
+.calendar-lite-title {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1;
+    color: #1a1f36;
+    font-weight: 700;
+}
+
+.calendar-lite-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px 6px;
+}
+
+.calendar-lite-view-tabs {
+    display: inline-flex;
+    border: 1px solid #cfd8e3;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.calendar-lite-tab {
+    border: none;
+    background: #ffffff;
+    color: #21314a;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.calendar-lite-tab + .calendar-lite-tab {
+    border-left: 1px solid #d7dee7;
+}
+
+.calendar-lite-tab.active {
+    background: #4f5cff;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.calendar-lite-tab[disabled] {
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+.calendar-lite-nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.calendar-lite-nav-btn,
+.calendar-lite-today-btn {
+    border: 1px solid #cfd8e3;
+    background: #ffffff;
+    color: #1e2b40;
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.calendar-lite-today-btn {
+    font-weight: 600;
+}
+
+.calendar-lite-month-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1b2b45;
+    padding: 6px 16px 12px;
+}
+
+.calendar-lite-grid-wrap {
+    padding: 0 12px 12px;
+}
+
+.calendar-lite-grid {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.calendar-lite-grid th {
+    background: #f5f7fb;
+    border: 1px solid #d9e1ea;
+    color: #22314a;
+    text-align: center;
+    padding: 10px 6px;
+    font-size: 13px;
+    text-transform: none;
+}
+
+.calendar-lite-day {
+    border: 1px solid #d9e1ea;
+    height: 128px;
+    vertical-align: top;
+    background: #ffffff;
+    padding: 6px;
+}
+
+.calendar-lite-day.is-empty {
+    background: #fafbfd;
+}
+
+.calendar-lite-day-number {
+    text-align: right;
+    color: #1d2f48;
+    font-size: 22px;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.calendar-lite-events {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.calendar-lite-event {
+    border: none;
+    border-radius: 4px;
+    background: #cdd0ff;
+    color: #132045;
+    text-align: left;
+    font-size: 12px;
+    padding: 4px 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.calendar-lite-more {
+    font-size: 11px;
+    color: #5f6b80;
+}
+
+@media (max-width: 980px) {
+    .calendar-lite-toolbar {
+        flex-wrap: wrap;
+    }
+    .calendar-lite-month-title {
+        font-size: 24px;
+    }
+    .calendar-lite-day {
+        height: 110px;
+    }
+    .calendar-lite-day-number {
+        font-size: 18px;
+    }
+}

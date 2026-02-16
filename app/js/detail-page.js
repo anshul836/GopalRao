@@ -1,6 +1,8 @@
 // Global variables to store data
 let currentRecordData = null;
 let currentDataofNotes = null; // Corrected spelling from 'currnet'
+let currentDataofActivities =null;
+let currentDataofCalendar = null;
 let userID;
 
 /* --------------------------------------------------
@@ -79,6 +81,7 @@ function fetchAtoZ(recId) {
 
         // Load Default Tab
         loadTab_Dashboard();
+        });
 
         /* --------------------------------------------------
            API CALL 2: Fetch Notes Data (Nested)
@@ -92,7 +95,6 @@ function fetchAtoZ(recId) {
             currentDataofNotes = noteResponse.data;
             
             
-                // console.log(currentDataofNotes);
 
                 // If the user is already looking at the Notes tab when this finishes, refresh it
                 const activeTab = document.querySelector(".tab-link.active").getAttribute("data-tab");
@@ -104,7 +106,42 @@ function fetchAtoZ(recId) {
             currentDataofNotes = []; // Set empty if call fails
         });
 
+        /* --------------------------------------------------
+       API CALL 3: Fetch Matter Details
+    -------------------------------------------------- */
+    ZOHO.CREATOR.API.getAllRecords({
+        appName: WIDGET_CONFIG.APP,
+        reportName: WIDGET_CONFIG.Activities,
+
+    }).then(function (response) {
+         currentDataofActivities = response.data || [];
+
+         const activeTab = document.querySelector(".tab-link.active")?.getAttribute("data-tab");
+         if (activeTab === "Activities" && currentRecordData?.Matter_Number) {
+            loadTab_Activities(currentRecordData.Matter_Number);
+         }
+    }).catch(function () {
+         currentDataofActivities = [];
     });
+
+    /* --------------------------------------------------
+       API CALL 4: Fetch Calendar Report Data
+    -------------------------------------------------- */
+    ZOHO.CREATOR.API.getAllRecords({
+        appName: WIDGET_CONFIG.APP,
+        reportName: WIDGET_CONFIG.CALENDAR,
+    }).then(function (response) {
+         currentDataofCalendar = response.data || [];
+
+         const activeTab = document.querySelector(".tab-link.active")?.getAttribute("data-tab");
+         if (activeTab === "Calendar" && currentRecordData?.Matter_Number) {
+            loadTab_Calendar(currentRecordData.Matter_Number);
+         }
+    }).catch(function () {
+         currentDataofCalendar = [];
+    });
+
+    
 }
 
 /* --------------------------------------------------
@@ -119,6 +156,10 @@ function switchTab(tabName, btnElement) {
 
     if (tabName === "Dashboard") {
         loadTab_Dashboard();
+    } else if (tabName === "Activities") {
+        loadTab_Activities(currentRecordData.Matter_Number);
+    } else if (tabName === "Calendar") {
+        loadTab_Calendar(currentRecordData.Matter_Number);
     } else if (tabName === "Notes") {
         loadTab_Notes(userID);
     } else {
